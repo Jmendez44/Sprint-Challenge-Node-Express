@@ -17,12 +17,12 @@ router.get("/", (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const user = await actions.insert(req.body);
-    res.status(201).json(user);
+    const action = await actions.insert(req.body);
+    res.status(201).json(action);
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: "Error adding user"
+      message: "No project with that id"
     });
   }
 });
@@ -31,11 +31,11 @@ router.delete("/:id", (req, res) => {
   const { id } = req.params;
   actions
     .remove(id)
-    .then(userRemoved => {
-      if (userRemoved === 0) {
+    .then(actionRemoved => {
+      if (actionRemoved === 0) {
         res.status(404).json({ message: "no access" });
       } else {
-        res.json({ success: "User Removed" });
+        res.json({ success: "Action Removed" });
       }
     })
     .catch(err => {
@@ -43,23 +43,22 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", async (req, res) => {
+  const { project_id, description, notes, completed } = req.body
   const { id } = req.params;
-  const { name } = req.body;
-  actions
-    .update(id, { name })
-    .then(response => {
-      if (response === 0) {
-        res.status(404).json({ message: "no access" });
-      } else {
-        db.find(id).then(user => {
-          res.json(user);
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).json({ message: "no access" });
-    });
-});
+
+  if (!actions.get(req.params.id)) {
+    res.status(404).json({ error: 'no action with that id' })
+  } else if (!project_id && !description && !notes && !completed) {
+    res.status(400).json({ error: 'no data to upldate action provided' })
+  } else {
+    try {
+      const updatedAction = await actions.update(req.params.id, req.body)
+      res.status(200).json(updatedAction)
+    } catch (error) {
+      res.status(500).json({ error: 'failed to update action in actions' })
+    }
+  }
+})
 
 module.exports = router;

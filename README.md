@@ -34,7 +34,7 @@ a function that is invoked before the request handler
 
 - [ ] Describe a Resource?
 
-
+not really sure.. don't remember going over that
 
 - [ ] What can the API return to help clients know if a request was successful?
 
