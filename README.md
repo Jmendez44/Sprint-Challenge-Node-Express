@@ -26,13 +26,23 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+route & (req,res)
+
 - [ ] Describe Middleware?
+
+a function that is invoked before the request handler
 
 - [ ] Describe a Resource?
 
+
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+a status message (200)
+
 - [ ] How can we partition our application into sub-applications?
+
+by routing
 
 ## Project Setup
 
